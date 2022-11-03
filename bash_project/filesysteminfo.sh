@@ -21,9 +21,6 @@
 ## Reset Text
   RESET_TEXT=$(tput sgr0)
 
-## Varibles
-
-
 ## Functions
 
 # Usage: Function that shows how to use the program.
