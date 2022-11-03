@@ -23,13 +23,16 @@
 
 ## Functions
 
+# stat -c %t /dev/sda3  -> numero mayor
+# stat -c %T /dev/sda3  -> numero menor
+
 # Usage: Function that shows how to use the program.
 
 function Usage() {
   echo "${BOLD_TEXT}${MAGENTA_TEXT}$TITLE${RESET_TEXT}"
   echo "${BOLD_TEXT}Script that displays mounted files system information${RESET_TEXT}"
   echo "${BOLD_TEXT}${GREEN_TEXT}How to use:${RESET_TEXT} ./filesysteminfo [parameters]"
-  echo "${BOLD_TEXT}${ULINE_TEXT}${BLUE_TEXT}Parameter:${RESET_TEXT}"
+  echo "${BOLD_TEXT}${ULINE_TEXT}${BLUE_TEXT}Parameters:${RESET_TEXT}"
   echo "-h | --help : Shows how to use the program."
   echo "-inv : Inverts the output command."
 }
@@ -38,15 +41,14 @@ function Usage() {
 
 SystemInfo() {
   if [ $# == 0 ]; then
-    #echo ${BOLD_TEXT}"File" ${RESET_TEXT}
-    for device in $(mount | cut -d ' ' -f 5 | sort | uniq); do
-      df -aT | grep -w $device | sort -k4 -n | head -n +1 | awk '{print $1"\t" $2"\t" $4"\t" $7"\t"}'
-    done | column -t
+    df -aT | sort -k2,2 -n | tail -n +1 | awk '{print $1"\t" $2"\t" $4"\t" $7"\t"}' | column -t
   
   elif [ $1 == "-inv" ]; then
-    for device in $(mount | cut -d ' ' -f 5 | sort -r | uniq); do
-      df -aT | grep -w $device | sort -k4 -nr | head -n +1 | awk '{print $1"\t" $2"\t" $4"\t" $7"\t"'
-    done | column -t
+    df -aT | sort -k2,2 -nr | tail -n +1 | awk '{print $1"\t" $2"\t" $4"\t" $7"\t"}' | column -t
+  
+  # MODIFICACION -> Muestra también el porcentaje en la tabla
+  elif [ $1 == "-op" ]; then
+    df -aT | sort -k2,2 -n | tail -n +1 | awk '{print $1"\t" $2"\t" $4"\t" $6"\t" $7"\t"}' | column -t
   fi
 }
 
@@ -58,6 +60,11 @@ while [ "$1" != "" ]; do
       exit 0
       ;;
     -inv)
+      SystemInfo $1
+      exit 0
+      ;;
+    # MODIFIACION AÑADIDA
+    -op | --output-percent)
       SystemInfo $1
       exit 0
       ;;
