@@ -44,7 +44,7 @@ SystemInfo() {
   if [ $invert ]; then
     SORT_PARAMS="r"
   fi
-  TABLE="$(df -aT 2> /dev/null | tail -n+2 | sort -k4 -n | sort -k2,2 ${SORT_PARAMS} | awk '{ print $1, $2, $4, $7 }')"
+  TABLE="$(df -aT 2> /dev/null | tail -n+2 | sort -k4,2 | awk '{ print $1, $2, $4, $7 }')"
   FINAL_TABLE=""
   PREVIOUS_TYPE=""
   USAGE_SUM=0
@@ -74,6 +74,7 @@ SystemInfo() {
     fi
   done
   IFS="${OLD_IFS}"
+  FINAL_TABLE=$(echo -e "${FINAL_TABLE}" | sort -k1 -${SORT_PARAMS})
   echo -e "NAME TYPE COUNT USAGE HIGH LOW MOUNT\n" "${FINAL_TABLE}" | column -t
 }
 
