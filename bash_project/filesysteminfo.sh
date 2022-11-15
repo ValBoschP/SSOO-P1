@@ -23,9 +23,6 @@
 
 ## Functions
 
-# stat -c %t /dev/sda3  -> numero mayor
-# stat -c %T /dev/sda3  -> numero menor
-
 # Usage: Function that shows how to use the program.
 
 function Usage() {
@@ -41,30 +38,36 @@ function Usage() {
 
 #
 SystemInfo() {
-  SORT_PARAMS=""
-  if [ $invert ]; then
-    SORT_PARAMS="r"
+  SORT_PARAMS=""          # Declaro una variable para ordenar la tabla al final
+  if [ $invert ]; then    
+    SORT_PARAMS="r"       # Si invert se cumple pues pondrá r (para inversa) en la tabla final
   fi
+  # Calculamos la tabla original con las columnas requeridas
   TABLE="$(df -aT 2> /dev/null | tail -n+2 | sort -k4,2 | awk '{ print $1, $2, $4, $7 }')"
+  # Declaramos una "Tabla final" para imprimirla al final una vez calculada la suma del usage
   FINAL_TABLE=""
+  # Declaramos una variable para guardar los tipos anteriores
   PREVIOUS_TYPE=""
   USAGE_SUM=0
   OLD_IFS="${IFS}"
   IFS=$'\n'
   for line in $TABLE; do
+    # Lee cada una de las líneas en la tabla para poder calcular todo lo que necesitamos
     IFS=$' ' read -a LINE <<< "${line}"
     if [[ "${PREVIOUS_TYPE}" != "${LINE[1]}" ]]; then
       if [[ "${PREVIOUS_TYPE}" ]]; then
-        FINAL_TABLE="${FINAL_TABLE}${FS_NAME} ${FS_TYPE} ${COUNT} ${USAGE_SUM} ${FS_HIGH} ${FS_LOW} ${FS_MOUNT}\n"
+        FINAL_TABLE="${FINAL_TABLE} ${FS_NAME} ${FS_TYPE} ${COUNT} ${USAGE_SUM} ${FS_HIGH} ${FS_LOW} ${FS_MOUNT}\n"
       fi
       COUNT=1
       PREVIOUS_TYPE="${LINE[1]}"
       USAGE_SUM="${LINE[2]}"
+      # Todas las variables de cada columna
       FS_NAME="${LINE[0]}"
       FS_TYPE="${LINE[1]}"
       FS_MOUNT="${LINE[3]}"
       FS_HIGH=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f5 | tr -d "," | tr -d "\n")
       FS_LOW=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f6)
+      # Si no se encuentra el valor mayor o menor, ponremos *
       if [[ ! "${FS_HIGH}" ]]; then
         FS_HIGH="*"
         FS_LOW="*"
@@ -76,10 +79,9 @@ SystemInfo() {
   done
   IFS="${OLD_IFS}"
   FINAL_TABLE=$(echo -e "${FINAL_TABLE}" | sort -k1 -${SORT_PARAMS})
-  echo -e "NAME TYPE COUNT USAGE HIGH LOW MOUNT\n" "${FINAL_TABLE}" | column -t
+  # Imprimimos nuestra tabla final resultante
+  echo -e "${BOLD_TEXT}${ULINE_TEXT}${MAGENTA_TEXT}NAME TYPE COUNT USAGE HIGH LOW MOUNT\n"${RESET_TEXT} "${FINAL_TABLE}" | column -t
 }
-
-# cuts & xargs
 
 # MAIN PROGRAM
 while [ "$1" != "" ]; do
@@ -91,6 +93,9 @@ while [ "$1" != "" ]; do
     -inv)
       invert=1
       ;;
+    #-devicefiles)
+    #  devfiles=1
+    #  ;;
     *)
     cat << _EOF_
       ${BOLD_TEXT}${RED_TEXT}ERROR: Invalid option! :(${RESET_TEXT}
@@ -105,3 +110,7 @@ done
 SystemInfo
 
 exit 0
+
+# CONSUMIENDO_USUARIO=0
+# USUARIOS=
+# 
