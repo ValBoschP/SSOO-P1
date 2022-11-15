@@ -39,6 +39,7 @@ function Usage() {
 
 # SystemInfo: Function that shows the types of file systems that are mounted on the system
 
+#
 SystemInfo() {
   SORT_PARAMS=""
   if [ $invert ]; then
@@ -89,11 +90,6 @@ while [ "$1" != "" ]; do
       ;;
     -inv)
       invert=1
-      ;;
-    # MODIFIACION AÑADIDA
-    -op | --output-percent)
-      SystemInfo $1
-      exit 0
       ;;
     *)
     cat << _EOF_
