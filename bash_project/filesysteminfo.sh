@@ -67,7 +67,7 @@ SystemInfo() {
       FS_MOUNT="${LINE[3]}"
       FS_HIGH=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f5 | tr -d "," | tr -d "\n")
       FS_LOW=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f6)
-      # Si no se encuentra el valor mayor o menor, ponremos *
+      # Si no se encuentra el valor mayor o menor, ponemos *
       if [[ ! "${FS_HIGH}" ]]; then
         FS_HIGH="*"
         FS_LOW="*"
