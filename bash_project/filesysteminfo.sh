@@ -31,7 +31,8 @@ function Usage() {
   echo "${BOLD_TEXT}${GREEN_TEXT}How to use:${RESET_TEXT} ./filesysteminfo [parameters]"
   echo "${BOLD_TEXT}${ULINE_TEXT}${BLUE_TEXT}Parameters:${RESET_TEXT}"
   echo "-h | --help : Shows how to use the program."
-  echo "-inv : Inverts the output command."
+  echo "-inv | --invert : Inverts the output command."
+  echo "-df | --devicefiles : Devices of the OS ad files"
 }
 
 # SystemInfo: Function that shows the types of file systems that are mounted on the system
@@ -42,6 +43,8 @@ SystemInfo() {
   if [ $invert ]; then    
     SORT_PARAMS="r"       # Si invert se cumple pues pondrá r (para inversa) en la tabla final
   fi
+  #if [ $devfiles ]; then
+
   # Calculamos la tabla original con las columnas requeridas
   TABLE="$(df -aT 2> /dev/null | tail -n+2 | sort -k4,2 | awk '{ print $1, $2, $4, $7 }')"
   # Declaramos una "Tabla final" para imprimirla al final una vez calculada la suma del usage
@@ -90,12 +93,12 @@ while [ "$1" != "" ]; do
       Usage
       exit 0
       ;;
-    -inv)
+    --invert | -inv)
       invert=1
       ;;
-    #-devicefiles)
-    #  devfiles=1
-    #  ;;
+    --devicefiles | -df)
+      devfiles=1
+      ;;
     *)
     cat << _EOF_
       ${BOLD_TEXT}${RED_TEXT}ERROR: Invalid option! :(${RESET_TEXT}
@@ -110,7 +113,3 @@ done
 SystemInfo
 
 exit 0
-
-# CONSUMIENDO_USUARIO=0
-# USUARIOS=
-# 
