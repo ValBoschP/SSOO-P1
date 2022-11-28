@@ -31,8 +31,8 @@ function Usage() {
   echo "-inv | --invert : Inverts the output command."
   echo "-df | --devicefiles : Open files"
   echo "-u | -user : Open files of each user"
-  echo "-sopen | --sortopen : "
-  echo "-sdevice | --sortdevice : "
+  echo "-sopen | --sortopen : Sorted by the number of open files"
+  echo "-sdevice | --sortdevice : Sorts from the total number of devices considered for each file system"
 }
 
 error_exit() {
