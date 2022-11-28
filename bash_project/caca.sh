@@ -31,24 +31,27 @@ function Usage() {
   echo "${BOLD_TEXT}${GREEN_TEXT}How to use:${RESET_TEXT} ./filesysteminfo [parameters]"
   echo "${BOLD_TEXT}${ULINE_TEXT}${BLUE_TEXT}Parameters:${RESET_TEXT}"
   echo "-h | --help : Shows how to use the program."
-  echo "-inv | --invert : Inverts the output command."
-  echo "-df | --devicefiles : Devices of the OS ad files"
+  echo "-inv : Inverts the output command."
 }
 
 # SystemInfo: Function that shows the types of file systems that are mounted on the system
 
+#
 SystemInfo() {
   SORT_PARAMS=""          # Declaro una variable para ordenar la tabla al final
+  
   if [ $invert ]; then    
     SORT_PARAMS="r"       # Si invert se cumple pues pondrá r (para inversa) en la tabla final
   fi
-  #if [ $devfiles ]; then
-  #else
+  # Calculamos la tabla original con las columnas requeridas
   TABLE="$(df -aT 2> /dev/null | tail -n+2 | sort -k4,2 | awk '{ print $1, $2, $4, $7 }')"
+  # Declaramos una "Tabla final" para imprimirla al final una vez calculada la suma del usage
   FINAL_TABLE=""
   # Declaramos una variable para guardar los tipos anteriores
   PREVIOUS_TYPE=""
   USAGE_SUM=0
+  # MODIFICACION
+  # AV_SUM=0
   OLD_IFS="${IFS}"
   IFS=$'\n'
   for line in $TABLE; do
@@ -56,25 +59,31 @@ SystemInfo() {
     IFS=$' ' read -a LINE <<< "${line}"
     if [[ "${PREVIOUS_TYPE}" != "${LINE[1]}" ]]; then
       if [[ "${PREVIOUS_TYPE}" ]]; then
-        FINAL_TABLE="${FINAL_TABLE} ${FS_NAME} ${FS_TYPE} ${COUNT} ${USAGE_SUM} ${FS_HIGH} ${FS_LOW} ${FS_MOUNT}\n"
+        FINAL_TABLE="${FINAL_TABLE} ${FS_NAME} ${FS_TYPE} ${COUNT} ${USAGE_SUM} ${AV_SUM} ${FS_HIGH} ${FS_LOW} ${FS_MOUNT}\n"
       fi
-    COUNT=1
-    PREVIOUS_TYPE="${LINE[1]}"
-    USAGE_SUM="${LINE[2]}"
-    # Todas las variables de cada columna
-    FS_NAME="${LINE[0]}"
-    FS_TYPE="${LINE[1]}"
-    FS_MOUNT="${LINE[3]}"
-    FS_HIGH=$(stat ${FS_NAME} -c %t 2> /dev/null | cut -d" " -f5 | tr -d "," | tr -d "\n")
-    FS_LOW=$(stat ${FS_NAME} -c %T 2> /dev/null | cut -d" " -f6)
-    # Si no se encuentra el valor mayor o menor, ponemos *
-    if [[ ! "${FS_HIGH}" ]]; then
-      FS_HIGH="*"
-      FS_LOW="*"
-    fi
+      COUNT=1
+      PREVIOUS_TYPE="${LINE[1]}"
+      USAGE_SUM="${LINE[2]}"
+      # MODIFICACION
+      # AV_SUM="${LINE[4]}"
+      # Todas las variables de cada columna
+      FS_NAME="${LINE[0]}"
+      FS_TYPE="${LINE[1]}"
+      FS_MOUNT="${LINE[3]}"
+      # MODIFICACION
+      # FS_AV="${LINE[4]}"
+      FS_HIGH=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f5 | tr -d "," | tr -d "\n")
+      FS_LOW=$(ls -l ${FS_NAME} 2> /dev/null | cut -d" " -f6)
+      # Si no se encuentra el valor mayor o menor, ponremos *
+      if [[ ! "${FS_HIGH}" ]]; then
+        FS_HIGH="*"
+        FS_LOW="*"
+      fi
     else
       COUNT=$((${COUNT} + 1))
       USAGE_SUM=$((${USAGE_SUM} + ${LINE[2]}))
+      # MODIFICACION
+      # AV_SUM=$((${AV_SUM} + ${LINE[4]}))
     fi
   done
   IFS="${OLD_IFS}"
@@ -90,11 +99,12 @@ while [ "$1" != "" ]; do
       Usage
       exit 0
       ;;
-    --invert | -inv)
+    -inv)
       invert=1
       ;;
-    #--devicefiles | -df)
-    #  devfiles=1
+    # MODIFICACIÓN 
+    #-av)
+    #  av=1
     #  ;;
     *)
     cat << _EOF_
@@ -110,3 +120,7 @@ done
 SystemInfo
 
 exit 0
+
+# CONSUMIENDO_USUARIO=0
+# USUARIOS=
+# 
