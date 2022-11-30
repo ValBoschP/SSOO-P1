@@ -7,8 +7,8 @@
  * Práctica 2: Copyfile
  * @autor: Valeria Bosch Pérez (alu0101485287@ull.edu.es)
  * @date: 29 Nov 2022
- * @file: copyfile.cc
- * @brief: copyfile functions
+ * @file: usages.h
+ * @brief: usages functions
  * Referencias:
  * Enlaces de interés
  * Historial de revisiones
@@ -16,12 +16,11 @@
  *  - Continuación del código
  *  - Finalización del código
  */
+#ifndef USAGES_H
+#define USAGES_H
 
-#include <string>
-#include "copyfile.h"
+#include <iostream>
 
-void CopyFile(const std::string& source_path, const std::string& destiny_path, bool preserve_all=false) {
-  
-}
+void Usage(int argc, char* argv[]);
 
-void MoveFile(const std::string& source_path, const std::string& destiny_path);
+#endif
