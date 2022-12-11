@@ -24,8 +24,9 @@ int main(int argc, char* argv[]) {
   try {
     Usage(argc, argv);
     Program(argc, argv);
-  } catch (...) {
+  } catch (const std::exception& error) {
     std::cerr << "Error copying file!" << std::endl;
+    throw error;
   }
   return EXIT_SUCCESS;
 }

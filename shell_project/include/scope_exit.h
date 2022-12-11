@@ -16,6 +16,8 @@
  *  - Continuación del código
  *  - Finalización del código
  */
+#ifndef SCOPE_EXIT_H
+#define SCOPE_EXIT_H
 
 #include <functional>
 
@@ -28,3 +30,5 @@ class ScopeExit {
  private:
   std::function<void()> scope_exit_;
 };
+
+#endif

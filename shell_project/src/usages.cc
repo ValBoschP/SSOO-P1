@@ -37,7 +37,6 @@ const std::string kParameters = {"-m", "-a"};
  */
 void Usage(int argc, char* argv[]) {
   const std::string kHelp{"--help"};
-  const std::string kFile{"--file"};
   if (argc == 1) {
     std::cerr << argv[0] << std::endl << kTitle << std::endl;
     std::cerr << "► How to use: " << argv[0]
@@ -62,13 +61,13 @@ void Usage(int argc, char* argv[]) {
 void Program(int argc, char* argv[]) {
   std::string src_path = argv[2];
   std::string dest_path = argv[3];
-  bool preserve_all;
+  bool preserve_all = false;
   if (argv[1] == "-m") {
     MoveFile(src_path, dest_path);
   } else if (argv[1] == "-a") {
     preserve_all = true;
     CopyFile(src_path, dest_path, preserve_all);
   } else {
-    CopyFile(src_path, dest_path);
+    CopyFile(src_path, dest_path, preserve_all);
   }
 }

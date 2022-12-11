@@ -17,10 +17,25 @@
  *  - Finalización del código
  */
 #include <iostream>
+#include <system_error>
+#include <string>
+#include <vector>
+#include <fcntl.h>
+#include <exception>
+#include <stdexcept>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <libgen.h>
+#include <sstream>
 
 #include "copyfile.h"
 #include "scope_exit.h"
 
+/**
+ * @brief: Reads the file
+ * @param[in]: file_descriptor
+ * @return: vector
+ */
 std::vector<uint8_t> ReadFile(const int file_descriptor) {
   try {
     std::vector<uint8_t> buffer(16ul * 1024 * 1024);
@@ -36,6 +51,11 @@ std::vector<uint8_t> ReadFile(const int file_descriptor) {
   }
 }
 
+/**
+ * @brief: Writes the file
+ * @param[in]: file_descriptor | buffer
+ * @return: vector
+ */
 std::vector<uint8_t> WriteFile(int file_descriptor, std::vector<uint8_t> buffer) {
   try {
     write(file_descriptor, buffer.data(), buffer.size());
@@ -45,7 +65,12 @@ std::vector<uint8_t> WriteFile(int file_descriptor, std::vector<uint8_t> buffer)
   }
 }
 
-void CopyFile(const std::string& source_path, const std::string& destination_path, bool preserve_all = false) {
+/**
+ * @brief: Copy files function
+ * @param[in]: source_path | destination_path | preserve_all
+ * @return: none
+ */
+void CopyFile(const std::string& source_path, const std::string& destination_path, bool preserve_all) {
   try {
 
     struct stat source_stat{};
@@ -110,6 +135,11 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
   }
 }
 
+/**
+ * @brief: Moves files function
+ * @param[in]: source_path | destination_path
+ * @return: none
+ */
 void MoveFile(const std::string& source_path, const std::string& destiny_path) {
   std::cout << "Working on it..." << std::endl;
 }
