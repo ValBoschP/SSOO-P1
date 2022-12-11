@@ -7,8 +7,8 @@
  * Práctica 2: Copyfile
  * @autor: Valeria Bosch Pérez (alu0101485287@ull.edu.es)
  * @date: 29 Nov 2022
- * @file: main.cc
- * @brief: main program
+ * @file: scope_exit.h
+ * @brief: scope_exit class
  * Referencias:
  * Enlaces de interés
  * Historial de revisiones
@@ -16,16 +16,15 @@
  *  - Continuación del código
  *  - Finalización del código
  */
-#include <iostream>
-#include "copyfile.h"
-#include "usages.h"
 
-int main(int argc, char* argv[]) {
-  try {
-    Usage(argc, argv);
-    Program(argc, argv);
-  } catch (...) {
-    std::cerr << "Error copying file!" << std::endl;
+#include <functional>
+
+class ScopeExit {
+ public:
+  explicit ScopeExit(const std::function<void()>& scope_exit) : scope_exit_(scope_exit) { }
+  ~ScopeExit() {
+    scope_exit_();
   }
-  return EXIT_SUCCESS;
-}
+ private:
+  std::function<void()> scope_exit_;
+};
