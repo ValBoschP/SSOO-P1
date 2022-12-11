@@ -29,45 +29,41 @@ const std::string kHelpText =
  » Parameters:\n\
     -m: The file will be moved not copied.\n\
     -a: Copies the attributes of the original file.";
-const std::string kParameters = {"-m", "-a"};
 /**
  * @brief: Explains how to use the program
  * @param[in]: argc | argv
  * @return: none
  */
-void Usage(int argc, char* argv[]) {
-  const std::string kHelp{"--help"};
-  if (argc == 1) {
-    std::cerr << argv[0] << std::endl << kTitle << std::endl;
-    std::cerr << "► How to use: " << argv[0]
-              << "[parameters] source/path destiny/path"
-              << std::endl;
-    std::cerr << "☺ Try " << argv[0] << " --help for more information."
-              << std::endl;
-    exit(EXIT_FAILURE);
-  }
-  if (argv[1] == kHelp) {
-    std::cout << kTitle << std::endl;
-    std::cout << kHelpText << std::endl;
-    exit(EXIT_SUCCESS);
+void Usage(const int argc, const char* argv[]) {
+  try {
+    const std::string kHelp{"--help"};
+    if (argc == 1) {
+      std::cerr << argv[0] << std::endl << kTitle << std::endl;
+      std::cerr << "► How to use: " << argv[0]
+                << "[parameters] source/path destiny/path"
+                << std::endl;
+      std::cerr << "☺ Try " << argv[0] << " --help for more information."
+                << std::endl;
+      exit(EXIT_FAILURE);
+    }
+    if (argv[1] == kHelp) {
+      std::cout << kTitle << std::endl;
+      std::cout << kHelpText << std::endl;
+      exit(EXIT_SUCCESS);
+    }
+  } catch (const std::exception& error) {
+    std::cerr << "Something went wrong!" << std:: endl;
+    throw error;
   }
 }
-
 /**
  * @brief: Runs the program
  * @param[in]: argc | argv
  * @return: none
  */
-void Program(int argc, char* argv[]) {
-  std::string src_path = argv[2];
-  std::string dest_path = argv[3];
+void Program(const int argc, const char* argv[]) {
+  std::string src_path = argv[1];
+  std::string dest_path = argv[2];
   bool preserve_all = false;
-  if (argv[1] == "-m") {
-    MoveFile(src_path, dest_path);
-  } else if (argv[1] == "-a") {
-    preserve_all = true;
-    CopyFile(src_path, dest_path, preserve_all);
-  } else {
-    CopyFile(src_path, dest_path, preserve_all);
-  }
+  CopyFile(src_path, dest_path, preserve_all);
 }

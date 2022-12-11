@@ -16,17 +16,6 @@
  *  - Continuación del código
  *  - Finalización del código
  */
-#include <iostream>
-#include <system_error>
-#include <string>
-#include <vector>
-#include <fcntl.h>
-#include <exception>
-#include <stdexcept>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <libgen.h>
-#include <sstream>
 
 #include "copyfile.h"
 #include "scope_exit.h"
@@ -59,6 +48,7 @@ std::vector<uint8_t> ReadFile(const int file_descriptor) {
 std::vector<uint8_t> WriteFile(int file_descriptor, std::vector<uint8_t> buffer) {
   try {
     write(file_descriptor, buffer.data(), buffer.size());
+    return buffer;
   } catch (const std::exception& error) {
     std::cerr << "Error writing the file!" << std::endl;
     throw error;
@@ -72,7 +62,6 @@ std::vector<uint8_t> WriteFile(int file_descriptor, std::vector<uint8_t> buffer)
  */
 void CopyFile(const std::string& source_path, const std::string& destination_path, bool preserve_all) {
   try {
-
     struct stat source_stat{};
     stat(source_path.c_str(), &source_stat);
     if (stat(source_path.c_str(), &source_stat) == -1) {
@@ -86,7 +75,8 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
     char* c_destination_path = const_cast<char*>(destination_path.c_str());
     std::string dst_dir_path = dirname(c_destination_path);
     struct stat dst_dir_stat{};
-    if (stat(destination_path.c_str(), &dst_dir_stat) == -1) {
+
+    if (stat(dst_dir_path.c_str(), &dst_dir_stat) == -1) {
       throw std::runtime_error("Destination path does not exist!");
     }
 
@@ -115,7 +105,7 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
       throw std::system_error(errno, std::system_category());
     }
 
-    int destination_fd = open(destination_path.c_str(), O_RDONLY);
+    int destination_fd = open(destination_path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     auto close_destination = ScopeExit([destination_fd]{
       close(destination_fd);
     });
@@ -133,13 +123,4 @@ void CopyFile(const std::string& source_path, const std::string& destination_pat
     std::cerr << "Error copying file!" << std::endl;
     throw error;
   }
-}
-
-/**
- * @brief: Moves files function
- * @param[in]: source_path | destination_path
- * @return: none
- */
-void MoveFile(const std::string& source_path, const std::string& destiny_path) {
-  std::cout << "Working on it..." << std::endl;
 }

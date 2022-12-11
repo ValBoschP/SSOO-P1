@@ -1,24 +1,16 @@
-CXX = g++
-CXXFLAGS = -std=c++17
-INCLUDEDIR = include
-SRCDIR = src
-OUTDIR = bin
-CPPFLAGS = -I./include
-DEPS = $(shell find $(SRCDIR) -type f -name '*.cc')
-TARGETS = $(basename $(notdir $(wildcard src/*.cc)))
-PROJECTNAME = Copyfile_Valeria_Bosch_Perez
+AUTHOR = BoschPerezValeria
+PROJECT_NAME = PR2-SSOO-2223
+DIR_PATH = $(shell realpath .)
+DIR_NAME = $(shell basename ${DIR_PATH})
 
-default_target: all
+cmake:
+	cmake -S . -B build
 
-all:
-	make clean
-	mkdir -p bin
-	$(CXX) $(CXXFLAGS) $(USER_DEFINES) -o $(OUTDIR)/copyfile $(DEPS) $(CPPFLAGS)
+build: cmake
+	cd build; make
 
-.PHONY: all clean prepare
-
-clean :
-	rm -fr bin
-	mkdir bin
+clean:
+	rm -rf build
 
 tar:
+	cd ..; tar cvfz ./${DIR_NAME}/${AUTHOR}-${PROJECT_NAME}.tar.gz --exclude-from=${DIR_NAME}/.gitignore ${DIR_NAME}

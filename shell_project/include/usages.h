@@ -21,7 +21,7 @@
 
 #include <iostream>
 
-void Usage(int argc, char* argv[]);
-void Program(int argc, char* argv[]);
+void Usage(const int argc, const char* argv[]);
+void Program(const int argc, const char* argv[]);
 
 #endif
