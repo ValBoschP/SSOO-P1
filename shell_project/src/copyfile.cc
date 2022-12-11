@@ -24,4 +24,7 @@ void CopyFile(const std::string& source_path, const std::string& destiny_path, b
   
 }
 
-void MoveFile(const std::string& source_path, const std::string& destiny_path);
+void MoveFile(const std::string& source_path, const std::string& destiny_path) {
+
+  
+}

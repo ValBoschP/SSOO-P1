@@ -71,5 +71,4 @@ void Program(int argc, char* argv[]) {
   } else {
     CopyFile(src_path, dest_path);
   }
-
 }

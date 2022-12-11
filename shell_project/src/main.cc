@@ -22,6 +22,6 @@
 
 int main(int argc, char* argv[]) {
   Usage(argc, argv);
-  
+  Program(argc, argv);
   return EXIT_SUCCESS;
 }
