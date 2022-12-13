@@ -1,0 +1,1 @@
+/usr/bin/g++ -g -Wl,--export-dynamic -rdynamic CMakeFiles/copyfile.dir/main.cc.o CMakeFiles/copyfile.dir/copyfile.cc.o CMakeFiles/copyfile.dir/usages.cc.o -o ../bin/copyfile 

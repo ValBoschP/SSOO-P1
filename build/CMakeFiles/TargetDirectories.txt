@@ -1,0 +1,5 @@
+/home/valer/SSOO-2022-2023/build/CMakeFiles/edit_cache.dir
+/home/valer/SSOO-2022-2023/build/CMakeFiles/rebuild_cache.dir
+/home/valer/SSOO-2022-2023/build/src/CMakeFiles/copyfile.dir
+/home/valer/SSOO-2022-2023/build/src/CMakeFiles/edit_cache.dir
+/home/valer/SSOO-2022-2023/build/src/CMakeFiles/rebuild_cache.dir
