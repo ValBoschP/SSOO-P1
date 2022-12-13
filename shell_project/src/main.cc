@@ -24,7 +24,7 @@ int main(const int argc, const char* argv[]) {
     Usage(argc, argv);
     Program(argc, argv);
   } catch (const std::exception& error) {
-    std::cerr << "sad" << std::endl;
+    std::cerr << "Something went wrong!" << std::endl;
     throw error;
   }
   return EXIT_SUCCESS;

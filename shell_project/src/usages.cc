@@ -27,8 +27,8 @@ const std::string kTitle =
 const std::string kHelpText =
  "• How to use: [parameters] ./copyfile source/path destiny/path\n\
  » Parameters:\n\
-    -m: The file will be moved not copied.\n\
-    -a: Copies the attributes of the original file.";
+    -m: The file will be moved not copied. (working on it)\n\
+    -a: Copies the attributes of the original file. (working on it)";
 /**
  * @brief: Explains how to use the program
  * @param[in]: argc | argv
